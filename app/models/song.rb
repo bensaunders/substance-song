@@ -7,7 +7,7 @@ class Song < ApplicationRecord
   def recite(start_verse = nil, song_length = nil)
     start_verse ||= starting_amount
     song_length ||= start_verse + 1
-    situation = SubstanceSituationFactory.build(start_verse, starting_amount)
+    situation = SubstanceSituationFactory.build(self, start_verse)
     song = Array.new(song_length)
     song.each_index do |index|
       song[index] = verse(situation)
@@ -25,14 +25,14 @@ class Song < ApplicationRecord
   # A factory for building the appropriate situation
   # for an amount of a substance
   module SubstanceSituationFactory
-    def self.build(substance_amount, max)
+    def self.build(song, substance_amount)
       case substance_amount
       when 0
-        NoSubstance.new(substance_amount, max)
+        NoSubstance.new(song, substance_amount)
       when 1
-        OneSubstance.new(substance_amount, max)
+        OneSubstance.new(song, substance_amount)
       else
-        PlentyOfSubstance.new(substance_amount, max)
+        PlentyOfSubstance.new(song, substance_amount)
       end
     end
   end
@@ -41,9 +41,9 @@ class Song < ApplicationRecord
   # certain number of containers of a substance available,
   # and you take some action to create a new situation
   class SubstanceSituation
-    def initialize(amount, max)
+    def initialize(song, amount)
+      @song = song
       @amount = amount
-      @max = max
     end
 
     def description
@@ -55,12 +55,12 @@ class Song < ApplicationRecord
     end
 
     def next_situation
-      SubstanceSituationFactory.build(amount - 1, max)
+      SubstanceSituationFactory.build(song, amount - 1)
     end
 
     private
 
-    attr_reader :amount, :max
+    attr_reader :amount, :song
   end
 
   PlentyOfSubstance = SubstanceSituation
@@ -87,7 +87,7 @@ class Song < ApplicationRecord
     end
 
     def next_situation
-      SubstanceSituationFactory.build(max, max)
+      SubstanceSituationFactory.build(song, song.starting_amount)
     end
   end
 end
