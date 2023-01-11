@@ -24,7 +24,3 @@ Style/Documentation:
 Style/GlobalStdStream:
   Exclude:
     - 'config/environments/production.rb'
-
-Style/RedundantConstantBase:
-  Exclude:
-    - 'config/environments/production.rb'
