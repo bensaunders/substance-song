@@ -1,5 +1,9 @@
 # Model that describes a 'substance song' (e.g. 99 bottles of beer)
 class Song < ApplicationRecord
+  attribute :starting_amount, default: 99
+  attribute :substance, default: 'beer'
+  attribute :location, default: 'on the wall'
+
   def recite(start_verse = nil, song_length = nil)
     start_verse ||= starting_amount
     song_length ||= start_verse + 1
@@ -13,8 +17,8 @@ class Song < ApplicationRecord
 
   def verse(situation)
     <<~TEXT
-      #{situation.description} of beer on the wall, #{situation.description.downcase} of beer.
-      #{situation.action}, #{situation.next_situation.description.downcase} of beer on the wall.
+      #{situation.description} of #{substance} #{location}, #{situation.description.downcase} of #{substance}.
+      #{situation.action}, #{situation.next_situation.description.downcase} of #{substance} #{location}.
     TEXT
   end
 

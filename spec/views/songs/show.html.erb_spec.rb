@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'songs/show.html.erb', type: :view do
-  let(:full_song) { Song.new(starting_amount: 99) }
+  let(:full_song) { Song.new }
   let(:full_lyrics) do
     <<~TEXT
       99 bottles of beer on the wall, 99 bottles of beer.
