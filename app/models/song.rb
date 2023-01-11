@@ -3,6 +3,7 @@ class Song < ApplicationRecord
   attribute :starting_amount, default: 99
   attribute :substance, default: 'beer'
   attribute :location, default: 'on the wall'
+  attribute :container, default: 'bottle'
 
   def recite(start_verse = nil, song_length = nil)
     start_verse ||= starting_amount
@@ -41,13 +42,15 @@ class Song < ApplicationRecord
   # certain number of containers of a substance available,
   # and you take some action to create a new situation
   class SubstanceSituation
+    include ActionView::Helpers::TextHelper
+
     def initialize(song, amount)
       @song = song
       @amount = amount
     end
 
     def description
-      "#{amount} bottles"
+      pluralize(amount, song.container)
     end
 
     def action
@@ -67,10 +70,6 @@ class Song < ApplicationRecord
 
   # a class for when there's one container left
   class OneSubstance < SubstanceSituation
-    def description
-      '1 bottle'
-    end
-
     def action
       'Take it down and pass it around'
     end
@@ -79,7 +78,7 @@ class Song < ApplicationRecord
   # a class for when there are no containers left
   class NoSubstance < SubstanceSituation
     def description
-      'No more bottles'
+      "No more #{song.container.pluralize(amount)}"
     end
 
     def action

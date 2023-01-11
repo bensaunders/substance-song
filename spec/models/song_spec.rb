@@ -466,4 +466,24 @@ RSpec.describe Song, type: :model do
       assert_equal expected, song.recite(3, 1)
     end
   end
+
+  describe '#container' do
+    let(:song) do
+      Song.new(container: 'can')
+    end
+
+    it 'uses the specified container' do
+      expected = <<~TEXT
+        2 cans of beer on the wall, 2 cans of beer.
+        Take one down and pass it around, 1 can of beer on the wall.
+
+        1 can of beer on the wall, 1 can of beer.
+        Take it down and pass it around, no more cans of beer on the wall.
+
+        No more cans of beer on the wall, no more cans of beer.
+        Go to the store and buy some more, 99 cans of beer on the wall.
+      TEXT
+      assert_equal expected, song.recite(2, 3)
+    end
+  end
 end
