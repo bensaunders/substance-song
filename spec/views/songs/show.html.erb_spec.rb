@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'songs/show.html.erb', type: :view do
-  let :full_song do
+  let(:full_song) { Song.new(starting_amount: 99) }
+  let(:full_lyrics) do
     <<~TEXT
       99 bottles of beer on the wall, 99 bottles of beer.
       Take one down and pass it around, 98 bottles of beer on the wall.
@@ -306,13 +307,13 @@ RSpec.describe 'songs/show.html.erb', type: :view do
   end
 
   it 'sings the full song' do
-    assign(:lyrics, Song.new.recite(99, 100))
+    assign(:lyrics, full_song.recite(99, 100))
     render
-    expect(rendered).to have_content(full_song)
+    expect(rendered).to have_content(full_lyrics)
   end
 
   it 'sings only requested verses' do
-    assign(:lyrics, Song.new.recite(3, 3))
+    assign(:lyrics, full_song.recite(3, 3))
     render
     expect(rendered).not_to have_content('4 bottles of beer on the wall, 4 bottles of beer.')
     expect(rendered).to have_content('3 bottles of beer on the wall, 3 bottles of beer.')

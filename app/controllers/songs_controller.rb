@@ -1,7 +1,7 @@
 # Controller for assembling a 'substance song' (e.g. 99 bottles of beer)
 class SongsController < ApplicationController
   def show
-    @lyrics = Song.new.recite(*recite_params(params))
+    @lyrics = Song.new(starting_amount: 99).recite(*recite_params(params))
   end
 
   private

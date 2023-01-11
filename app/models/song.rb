@@ -1,11 +1,9 @@
 # Model that describes a 'substance song' (e.g. 99 bottles of beer)
 class Song < ApplicationRecord
-  FIRST_VERSE = 99
-
   def recite(start_verse = nil, song_length = nil)
-    start_verse ||= FIRST_VERSE
+    start_verse ||= starting_amount
     song_length ||= start_verse + 1
-    situation = SubstanceSituationFactory.build(start_verse, FIRST_VERSE)
+    situation = SubstanceSituationFactory.build(start_verse, starting_amount)
     song = Array.new(song_length)
     song.each_index do |index|
       song[index] = verse(situation)

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Song, type: :model do
-  let(:song) { Song.new }
+  let(:song) { Song.new(starting_amount: 99) }
 
   it 'recites the first generic verse' do
     expected = <<~TEXT
@@ -414,5 +414,26 @@ RSpec.describe Song, type: :model do
       Go to the store and buy some more, 99 bottles of beer on the wall.
     TEXT
     assert_equal expected, song.recite(2)
+  end
+
+  describe '#starting_amount' do
+    let(:song) { Song.new(starting_amount: 3) }
+
+    it 'defaults to starting at the starting amount' do
+      expected = <<~TEXT
+        3 bottles of beer on the wall, 3 bottles of beer.
+        Take one down and pass it around, 2 bottles of beer on the wall.
+
+        2 bottles of beer on the wall, 2 bottles of beer.
+        Take one down and pass it around, 1 bottle of beer on the wall.
+
+        1 bottle of beer on the wall, 1 bottle of beer.
+        Take it down and pass it around, no more bottles of beer on the wall.
+
+        No more bottles of beer on the wall, no more bottles of beer.
+        Go to the store and buy some more, 3 bottles of beer on the wall.
+      TEXT
+      assert_equal expected, song.recite
+    end
   end
 end
