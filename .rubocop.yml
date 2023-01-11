@@ -1,5 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
+require: rubocop-rails
+
 AllCops:
   NewCops: enable
   Exclude:
@@ -8,3 +10,6 @@ AllCops:
     - 'bin/rails'
     - 'bin/rake'
     - 'bin/setup'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
