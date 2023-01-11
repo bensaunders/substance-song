@@ -1,8 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe 'songs/show.html.erb', type: :view do
-  let :full_song do
-    <<~TEXT
+RSpec.describe Song, type: :model do
+  let(:song) { Song.new }
+
+  it 'recites the whole song' do
+    expected = <<~TEXT
       99 bottles of beer on the wall, 99 bottles of beer.
       Take one down and pass it around, 98 bottles of beer on the wall.
 
@@ -303,11 +305,6 @@ RSpec.describe 'songs/show.html.erb', type: :view do
       No more bottles of beer on the wall, no more bottles of beer.
       Go to the store and buy some more, 99 bottles of beer on the wall.
     TEXT
-  end
-
-  it 'sings the full song' do
-    assign(:song, Song.new)
-    render
-    expect(rendered).to have_content(full_song)
+    assert_equal expected, song.recite(99, 100)
   end
 end
