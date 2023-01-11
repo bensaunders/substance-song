@@ -16,6 +16,10 @@ Lint/EmptyBlock:
   Exclude:
     - 'db/schema.rb'
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
