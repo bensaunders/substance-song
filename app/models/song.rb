@@ -2,11 +2,10 @@
 class Song < ApplicationRecord
   FIRST_VERSE = 99
 
-  def recite(start_verse, song_length)
-    situation = SubstanceSituationFactory.build(
-      start_verse,
-      FIRST_VERSE
-    )
+  def recite(start_verse = nil, song_length = nil)
+    start_verse ||= FIRST_VERSE
+    song_length ||= start_verse + 1
+    situation = SubstanceSituationFactory.build(start_verse, FIRST_VERSE)
     song = Array.new(song_length)
     song.each_index do |index|
       song[index] = verse(situation)
