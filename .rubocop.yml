@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 require: rubocop-rails
 
 AllCops:
@@ -13,3 +11,20 @@ AllCops:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Lint/EmptyBlock:
+  Exclude:
+    - 'db/schema.rb'
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/application.rb'
+
+Style/GlobalStdStream:
+  Exclude:
+    - 'config/environments/production.rb'
+
+Style/RedundantConstantBase:
+  Exclude:
+    - 'config/environments/production.rb'
