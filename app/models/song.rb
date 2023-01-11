@@ -1,5 +1,7 @@
 # Model that describes a 'substance song' (e.g. 99 bottles of beer)
 class Song < ApplicationRecord
+  include Presentable
+
   attribute :starting_amount, default: 99
   attribute :substance, default: 'beer'
   attribute :location, default: 'on the wall'
@@ -14,12 +16,6 @@ class Song < ApplicationRecord
       lyrics[index] = verse(situation)
       situation = situation.next_situation
     end
-  end
-
-  def recite(start_verse = nil, song_length = nil)
-    lyrics(start_verse, song_length).map do |verse_lines|
-      verse_lines.join("\n")
-    end.join("\n\n")
   end
 
   def verse(situation)
