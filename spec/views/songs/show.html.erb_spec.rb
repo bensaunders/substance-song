@@ -306,8 +306,18 @@ RSpec.describe 'songs/show.html.erb', type: :view do
   end
 
   it 'sings the full song' do
-    assign(:song, Song.new)
+    assign(:lyrics, Song.new.recite(99, 100))
     render
     expect(rendered).to have_content(full_song)
+  end
+
+  it 'sings only requested verses' do
+    assign(:lyrics, Song.new.recite(3, 3))
+    render
+    expect(rendered).not_to have_content('4 bottles of beer on the wall, 4 bottles of beer.')
+    expect(rendered).to have_content('3 bottles of beer on the wall, 3 bottles of beer.')
+    expect(rendered).to have_content('2 bottles of beer on the wall, 2 bottles of beer.')
+    expect(rendered).to have_content('1 bottle of beer on the wall, 1 bottle of beer.')
+    expect(rendered).not_to have_content('No more bottles of beer on the wall, no more bottles of beer.')
   end
 end
