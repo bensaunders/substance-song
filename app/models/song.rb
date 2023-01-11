@@ -5,22 +5,28 @@ class Song < ApplicationRecord
   attribute :location, default: 'on the wall'
   attribute :container, default: 'bottle'
 
-  def recite(start_verse = nil, song_length = nil)
+  def lyrics(start_verse = nil, song_length = nil)
     start_verse ||= starting_amount
     song_length ||= start_verse + 1
     situation = SubstanceSituationFactory.build(self, start_verse)
-    song = Array.new(song_length)
-    song.each_index do |index|
-      song[index] = verse(situation)
+    lyrics = Array.new(song_length)
+    lyrics.each_index do |index|
+      lyrics[index] = verse(situation)
       situation = situation.next_situation
-    end.join("\n")
+    end
+  end
+
+  def recite(start_verse = nil, song_length = nil)
+    lyrics(start_verse, song_length).map do |verse_lines|
+      verse_lines.join("\n")
+    end.join("\n\n")
   end
 
   def verse(situation)
-    <<~TEXT
-      #{situation.description} of #{substance} #{location}, #{situation.description.downcase} of #{substance}.
-      #{situation.action}, #{situation.next_situation.description.downcase} of #{substance} #{location}.
-    TEXT
+    [
+      "#{situation.description} of #{substance} #{location}, #{situation.description.downcase} of #{substance}.",
+      "#{situation.action}, #{situation.next_situation.description.downcase} of #{substance} #{location}."
+    ]
   end
 
   # A factory for building the appropriate situation
