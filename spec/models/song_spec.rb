@@ -3,6 +3,91 @@ require 'rails_helper'
 RSpec.describe Song, type: :model do
   let(:song) { Song.new }
 
+  it 'recites the first generic verse' do
+    expected = <<~TEXT
+      99 bottles of beer on the wall, 99 bottles of beer.
+      Take one down and pass it around, 98 bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(99, 1)
+  end
+
+  it 'recites the last generic verse' do
+    expected = <<~TEXT
+      3 bottles of beer on the wall, 3 bottles of beer.
+      Take one down and pass it around, 2 bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(3, 1)
+  end
+
+  it 'recites the two-bottles verse' do
+    expected = <<~TEXT
+      2 bottles of beer on the wall, 2 bottles of beer.
+      Take one down and pass it around, 1 bottle of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(2, 1)
+  end
+
+  it 'recites the second-to-last verse' do
+    expected = <<~TEXT
+      1 bottle of beer on the wall, 1 bottle of beer.
+      Take it down and pass it around, no more bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(1, 1)
+  end
+
+  it 'recites the last verse' do
+    expected = <<~TEXT
+      No more bottles of beer on the wall, no more bottles of beer.
+      Go to the store and buy some more, 99 bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(0, 1)
+  end
+
+  it 'recites the last two verses' do
+    expected = <<~TEXT
+      99 bottles of beer on the wall, 99 bottles of beer.
+      Take one down and pass it around, 98 bottles of beer on the wall.
+
+      98 bottles of beer on the wall, 98 bottles of beer.
+      Take one down and pass it around, 97 bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(99, 2)
+  end
+
+  it 'recites the last three verses' do
+    expected = <<~TEXT
+      2 bottles of beer on the wall, 2 bottles of beer.
+      Take one down and pass it around, 1 bottle of beer on the wall.
+
+      1 bottle of beer on the wall, 1 bottle of beer.
+      Take it down and pass it around, no more bottles of beer on the wall.
+
+      No more bottles of beer on the wall, no more bottles of beer.
+      Go to the store and buy some more, 99 bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(2, 3)
+  end
+
+  it 'rolls over to the first verse again' do
+    expected = <<~TEXT
+      2 bottles of beer on the wall, 2 bottles of beer.
+      Take one down and pass it around, 1 bottle of beer on the wall.
+
+      1 bottle of beer on the wall, 1 bottle of beer.
+      Take it down and pass it around, no more bottles of beer on the wall.
+
+      No more bottles of beer on the wall, no more bottles of beer.
+      Go to the store and buy some more, 99 bottles of beer on the wall.
+
+      99 bottles of beer on the wall, 99 bottles of beer.
+      Take one down and pass it around, 98 bottles of beer on the wall.
+
+      98 bottles of beer on the wall, 98 bottles of beer.
+      Take one down and pass it around, 97 bottles of beer on the wall.
+    TEXT
+    assert_equal expected, song.recite(2, 5)
+  end
+
   it 'recites the whole song' do
     expected = <<~TEXT
       99 bottles of beer on the wall, 99 bottles of beer.
