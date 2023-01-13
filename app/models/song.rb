@@ -10,12 +10,27 @@ class Song < ApplicationRecord
   def lyrics(start_verse = nil, song_length = nil)
     start_verse ||= starting_amount
     song_length ||= start_verse + 1
-    situation = SubstanceSituationFactory.build(self, start_verse)
+    situation = build_situation(start_verse)
     lyrics = Array.new(song_length)
     lyrics.each_index do |index|
       lyrics[index] = verse(situation)
       situation = situation.next_situation
     end
+  end
+
+  def build_situation(substance_amount)
+    substance_amount = starting_amount unless valid_amount?(substance_amount)
+
+    SubstanceSituation.build(self, substance_amount)
+  end
+
+  private
+
+  def valid_amount?(amount)
+    return false unless amount.is_a?(Integer)
+    return false unless amount.between?(0, starting_amount)
+
+    true
   end
 
   def verse(situation)
@@ -25,9 +40,12 @@ class Song < ApplicationRecord
     ]
   end
 
-  # A factory for building the appropriate situation
-  # for an amount of a substance
-  module SubstanceSituationFactory
+  # a class that describes the situation when there are a
+  # certain number of containers of a substance available,
+  # and you take some action to create a new situation
+  class SubstanceSituation
+    include ActionView::Helpers::TextHelper
+
     def self.build(song, substance_amount)
       case substance_amount
       when 0
@@ -38,13 +56,6 @@ class Song < ApplicationRecord
         PlentyOfSubstance.new(song, substance_amount)
       end
     end
-  end
-
-  # a class that describes the situation when there are a
-  # certain number of containers of a substance available,
-  # and you take some action to create a new situation
-  class SubstanceSituation
-    include ActionView::Helpers::TextHelper
 
     def initialize(song, amount)
       @song = song
@@ -60,7 +71,7 @@ class Song < ApplicationRecord
     end
 
     def next_situation
-      SubstanceSituationFactory.build(song, amount - 1)
+      song.build_situation(amount - 1)
     end
 
     private
@@ -88,7 +99,7 @@ class Song < ApplicationRecord
     end
 
     def next_situation
-      SubstanceSituationFactory.build(song, song.starting_amount)
+      song.build_situation(song.starting_amount)
     end
   end
 end

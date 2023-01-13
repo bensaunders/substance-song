@@ -373,4 +373,28 @@ RSpec.describe Song, type: :model do
       assert_equal expected, song.lyrics(2, 3)
     end
   end
+
+  describe '#build_situation' do
+    it 'defaults to the starting amount' do
+      [nil, 'a', [], -1, 1.7].each do |invalid_amount|
+        situation = song.build_situation(invalid_amount)
+        expect(situation).to be_a(Song::PlentyOfSubstance)
+        expect(situation.send(:amount)).to eq(99)
+      end
+    end
+
+    it 'builds a "plenty" situation for most amounts' do
+      [99, 2, 1000, 54].each do |normal_amount|
+        expect(song.build_situation(normal_amount)).to be_a(Song::PlentyOfSubstance)
+      end
+    end
+
+    it 'builds a "one" situation for an amount of 1' do
+      expect(song.build_situation(1)).to be_a(Song::OneSubstance)
+    end
+
+    it 'builds a "none" situation for an amount of 0' do
+      expect(song.build_situation(0)).to be_a(Song::NoSubstance)
+    end
+  end
 end
