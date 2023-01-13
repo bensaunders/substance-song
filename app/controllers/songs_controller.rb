@@ -1,7 +1,11 @@
 # Controller for assembling a 'substance song' (e.g. 99 bottles of beer)
 class SongsController < ApplicationController
   def show
-    @lyrics = Song.new.decorate.recite(*recite_params(params))
+    song = Song.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render plain: '404 Not Found', status: :not_found
+  else
+    @lyrics = song.decorate.recite(*recite_params(params))
   end
 
   private
