@@ -7,11 +7,11 @@ class SubstanceSituation
   def self.build(song, substance_amount)
     case substance_amount
     when 0
-      NoSubstance.new(song, substance_amount)
+      NoneLeft.new(song, substance_amount)
     when 1
-      OneSubstance.new(song, substance_amount)
+      OneLeft.new(song, substance_amount)
     else
-      PlentyOfSubstance.new(song, substance_amount)
+      PlentyLeft.new(song, substance_amount)
     end
   end
 
@@ -35,28 +35,4 @@ class SubstanceSituation
   private
 
   attr_reader :amount, :song
-end
-
-PlentyOfSubstance = SubstanceSituation
-
-# a class for when there's one container left
-class OneSubstance < SubstanceSituation
-  def action
-    'Take it down and pass it around'
-  end
-end
-
-# a class for when there are no containers left
-class NoSubstance < SubstanceSituation
-  def description
-    "No more #{song.container.pluralize(amount)}"
-  end
-
-  def action
-    'Go to the store and buy some more'
-  end
-
-  def next_situation
-    song.build_situation(song.starting_amount)
-  end
 end
