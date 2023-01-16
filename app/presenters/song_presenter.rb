@@ -5,4 +5,9 @@ class SongPresenter < SimpleDelegator
       verse_lines.join("\n")
     end.join("\n\n")
   end
+
+  def name
+    situation = SubstanceSituation.build(self, starting_amount)
+    "#{situation.description} of #{substance} #{location}"
+  end
 end

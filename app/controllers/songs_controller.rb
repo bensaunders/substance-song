@@ -1,5 +1,9 @@
 # Controller for assembling a 'substance song' (e.g. 99 bottles of beer)
 class SongsController < ApplicationController
+  def index
+    @songs = Song.all.map(&:decorate)
+  end
+
   def show
     song = Song.find(params[:id])
   rescue ActiveRecord::RecordNotFound

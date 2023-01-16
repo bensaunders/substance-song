@@ -2,6 +2,26 @@ require 'rails_helper'
 
 RSpec.describe 'Songs', type: :request do
   describe 'GET /show' do
+    context 'when there are no songs' do
+      it 'returns http success' do
+        get '/songs'
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when there is a song' do
+      before do
+        Song.create
+      end
+
+      it 'returns http success' do
+        get '/songs'
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe 'GET /show/:id' do
     let(:song) { Song.create(container: 'flagon') }
 
     context 'when an incorrect id is passed' do
